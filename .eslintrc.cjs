@@ -24,6 +24,7 @@ module.exports = {
         'plugin:vue/vue3-essential',
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended',
+        'plugin:vue/recommended',
     ],
     plugins: ['vue', '@typescript-eslint'],
     /*
@@ -35,7 +36,7 @@ module.exports = {
         // eslint（https://eslint.bootcss.com/docs/rules/）
         'no-var': 'error', // 要求使用 let 或 const 而不是 var
         'no-multiple-empty-lines': ['warn', { max: 1 }], // 不允许多个空行
-        // 'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-unexpected-multiline': 'error', // 禁止空余的多行
         'no-useless-escape': 'off', // 禁止不必要的转义字符
@@ -53,5 +54,16 @@ module.exports = {
         'vue/script-setup-uses-vars': 'error', // 防止<script setup>使用的变量<template>被标记为未使用
         'vue/no-mutating-props': 'off', // 不允许组件 prop的改变
         'vue/attribute-hyphenation': 'off', // 对模板中的自定义组件强制执行属性命名样式
+
+        'vue/max-attributes-per-line': [
+            2,
+            {
+                singleline: 10,
+                multiline: {
+                    max: 1,
+                    allowFirstLine: false,
+                },
+            },
+        ],
     },
 }

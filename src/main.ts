@@ -12,24 +12,21 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 // svg
 import 'virtual:svg-icons-register'
+// 引入全局组件
+import gloablComponent from './components/index'
+// 引入路由
+import router from './router'
+// 引入pinia
+import store from './store'
+
 const app = createApp(App)
+
 app.use(ElementPlus, {
     locale: zhCn,
 })
-// 引入全局组件
-import gloablComponent from './components/index'
 
-import axios from 'axios'
-axios({
-    url: '/api/user/login',
-    method: 'post',
-    data: {
-        username: 'admin',
-        password: '111111',
-    },
-}).then((res) => {
-    console.log(res)
-})
+app.use(router)
+app.use(store)
 
 app.use(gloablComponent)
 

@@ -3,5 +3,3 @@ declare module '*.vue' {
     const vueComponent: DefineComponent<{}, {}, any>
     export default vueComponent
 }
-
-declare module 'element-plus'
