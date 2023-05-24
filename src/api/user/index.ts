@@ -8,10 +8,10 @@ const requestDict = {
 
 // 定义登录接口
 export const reqLogin = (data: any) => {
-    request.post(requestDict.login_url, data)
+    return request.post(requestDict.login_url, data)
 }
 
 // 定义获取用户信息接口
-export const reqUserInfo = (data: any) => {
-    request.get(requestDict.userinfo_url, data)
+export const reqUserInfo = () => {
+    return request.get(requestDict.userinfo_url)
 }
