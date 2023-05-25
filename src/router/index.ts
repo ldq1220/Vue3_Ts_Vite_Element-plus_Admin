@@ -1,10 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { constantRoute } from './routes'
+import { constantRoute, asnycRoute, anyRoute } from './routes'
 
 const router = createRouter({
     // 路由模式
     history: createWebHashHistory(),
-    routes: constantRoute,
+    routes: [...constantRoute, ...asnycRoute, anyRoute],
 })
 
 export default router

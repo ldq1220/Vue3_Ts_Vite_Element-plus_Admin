@@ -18,8 +18,15 @@ import gloablComponent from './components/index'
 import router from './router'
 // 引入pinia
 import store from './store'
+// 全局引入element-puls的icon
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const app = createApp(App)
+
+// 全局引入element-puls的icon
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 
 app.use(ElementPlus, {
     locale: zhCn,
