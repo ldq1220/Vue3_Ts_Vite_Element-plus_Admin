@@ -2,7 +2,7 @@
     <div class="layout_container">
         <!-- 左侧菜单 -->
         <div class="layout_slider" :class="layoutSettingStore.fold ? 'fold' : ''">
-            <Logo title="我的甄选运营平台"></Logo>
+            <Logo :title="$t('title.text')"></Logo>
             <!-- 展示菜单 -->
             <!-- 滚动组件 -->
             <el-scrollbar class="scrollbar">

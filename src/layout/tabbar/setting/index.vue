@@ -1,4 +1,8 @@
 <template>
+    <el-select v-model="lang" @change="changeLang" placeholder="中文">
+        <el-option label="中文" value="zn" />
+        <el-option label="英文" value="en" />
+    </el-select>
     <el-button size="small" icon="Refresh" circle @click="refreshCom"></el-button>
     <el-button size="small" icon="FullScreen" circle @click="fullScreen"></el-button>
 
@@ -6,11 +10,11 @@
         <!-- 表单元素 -->
         <el-form>
             <el-form-item label="主题颜色">
-                <el-color-picker size="small" show-alpha />
+                <el-color-picker size="small" @change="changeThemeColor" v-model="themeColor" show-alpha />
             </el-form-item>
             <el-form-item label="暗黑模式">
-                <el-switch class="mt-2" style="margin-left: 24px" inline-prompt active-icon="MoonNight"
-                    inactive-icon="Sunny" />
+                <el-switch @change="changeDark" v-model="dark" class="mt-2" style="margin-left: 24px" inline-prompt
+                    active-icon="MoonNight" inactive-icon="Sunny" />
             </el-form-item>
         </el-form>
         <template #reference>
@@ -29,7 +33,7 @@
         </span>
         <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
         </template>
     </el-dropdown>
@@ -38,9 +42,22 @@
 <script setup lang="ts">
 import uselayoutSettingStore from '@/store/modules/setting';
 import useUserStore from '@/store/modules/user';
+import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+
+import { useI18n } from "vue-i18n";
+const { locale } = useI18n();
 
 const userStore = useUserStore()
+const router = useRouter()
+const route = useRoute()
 const layoutSettingStore = uselayoutSettingStore()
+
+const lang = ref()
+// 切换语言
+const changeLang = () => {
+    locale.value = lang.value
+}
 
 const refreshCom = () => {
     layoutSettingStore.refresh = !layoutSettingStore.refresh
@@ -59,7 +76,26 @@ const fullScreen = () => {
     }
 }
 
+// 退出登录
+const logout = async () => {
+    await userStore.userLogout()
+    const path = route.path
+    router.push({ path: '/login', query: { redirect: path } })
+}
 
+// 切换暗黑模式
+let dark = ref(false)
+const changeDark = () => {
+    let html = document.documentElement
+    dark.value ? html.className = 'dark' : html.className = ''
+}
+
+// 主题颜色设置
+let themeColor = ref()
+const changeThemeColor = () => {
+    const el = document.documentElement
+    el.style.setProperty('--el-color-primary', themeColor.value)
+}
 </script>
 
 <script lang="ts">

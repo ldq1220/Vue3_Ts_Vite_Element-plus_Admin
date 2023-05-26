@@ -1,21 +1,12 @@
 <template>
     <div>
         <h2>home develop</h2>
+        <el-pagination :page-sizes="[100, 200, 300, 400]" layout="total, sizes, prev, pager, next, jumper" :total="400" />
+        <p>{{ $t('menu.home') }}</p>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import useUserStore from '@/store/modules/user';
-
-const userStore = useUserStore();
-
-onMounted(() => {
-    userStore.userInfo()
-})
-
-
-
 </script>
 
 <style></style>

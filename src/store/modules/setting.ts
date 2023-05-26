@@ -7,7 +7,7 @@ const uselayoutSettingStore = defineStore('Setting', () => {
         fold.value = !fold.value
     }
 
-    const refresh = ref(false)
+    const refresh = ref(false) // 控制刷新
 
     return {
         fold,

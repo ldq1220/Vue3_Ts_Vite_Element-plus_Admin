@@ -3,9 +3,9 @@ export const getTime = () => {
     const time = new Date().getHours()
     let message = ''
     if (time <= 8) {
-        message = 'Hi! 早上好！'
+        message = 'Hi! 早上好 '
     } else if (time <= 12) {
-        message = 'Hi! 上午好！'
+        message = 'Hi! 上午好! '
     } else if (time <= 18) {
         message = 'Hi! 下午好！'
     } else {

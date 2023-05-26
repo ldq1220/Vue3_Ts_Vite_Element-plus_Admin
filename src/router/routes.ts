@@ -27,7 +27,7 @@ export const constantRoute = [
                 path: '/home',
                 component: () => import('@/views/home/index.vue'),
                 meta: {
-                    title: '首页',
+                    title: 'home',
                     hidden: false,
                     icon: 'HomeFilled',
                 },
@@ -51,7 +51,7 @@ export const constantRoute = [
         name: 'Screen',
         meta: {
             hidden: false,
-            title: '数据大屏',
+            title: 'data',
             icon: 'Platform',
         },
     },
@@ -64,7 +64,7 @@ export const asnycRoute = [
         component: () => import('@/layout/index.vue'),
         name: 'Acl',
         meta: {
-            title: '权限管理',
+            title: 'acl',
             icon: 'Lock',
         },
         redirect: '/acl/user',
@@ -74,7 +74,7 @@ export const asnycRoute = [
                 component: () => import('@/views/acl/user/index.vue'),
                 name: 'User',
                 meta: {
-                    title: '用户管理',
+                    title: 'aclUser',
                     icon: 'User',
                 },
             },
@@ -83,7 +83,7 @@ export const asnycRoute = [
                 component: () => import('@/views/acl/role/index.vue'),
                 name: 'Role',
                 meta: {
-                    title: '角色管理',
+                    title: 'aclRole',
                     icon: 'UserFilled',
                 },
             },
@@ -92,7 +92,7 @@ export const asnycRoute = [
                 component: () => import('@/views/acl/permission/index.vue'),
                 name: 'Permission',
                 meta: {
-                    title: '菜单管理',
+                    title: 'aclPermission',
                     icon: 'Monitor',
                 },
             },
@@ -103,7 +103,7 @@ export const asnycRoute = [
         component: () => import('@/layout/index.vue'),
         name: 'Product',
         meta: {
-            title: '商品管理',
+            title: 'product',
             icon: 'Goods',
         },
         redirect: '/product/trademark',
@@ -113,7 +113,7 @@ export const asnycRoute = [
                 component: () => import('@/views/product/trademark/index.vue'),
                 name: 'Trademark',
                 meta: {
-                    title: '品牌管理',
+                    title: 'proAttr',
                     icon: 'ShoppingCartFull',
                 },
             },
@@ -122,7 +122,7 @@ export const asnycRoute = [
                 component: () => import('@/views/product/attr/index.vue'),
                 name: 'Attr',
                 meta: {
-                    title: '属性管理',
+                    title: 'proTrademark',
                     icon: 'ChromeFilled',
                 },
             },
@@ -131,7 +131,7 @@ export const asnycRoute = [
                 component: () => import('@/views/product/spu/index.vue'),
                 name: 'Spu',
                 meta: {
-                    title: 'SPU管理',
+                    title: 'proSpu',
                     icon: 'Calendar',
                 },
             },
@@ -140,7 +140,7 @@ export const asnycRoute = [
                 component: () => import('@/views/product/sku/index.vue'),
                 name: 'Sku',
                 meta: {
-                    title: 'SKU管理',
+                    title: 'proSku',
                     icon: 'Orange',
                 },
             },

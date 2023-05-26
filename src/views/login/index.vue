@@ -29,17 +29,18 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import useUserStore from '@/store/modules/user';
 import { ElNotification } from 'element-plus';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { getTime } from '@/utils/getTime'
 
-const UserStore = useUserStore()
+const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const loading = ref(false) // 控制登录按钮 加载效果
 const loginFormDom = ref()
 
 const loginForm = reactive({
     username: 'admin',
-    password: '111111',
+    password: 'atguigu123',
 })
 
 // 组定义表单校验规则
@@ -72,16 +73,17 @@ const login = async () => {
     // 保证表单校验通过 再发请求
     await loginFormDom.value.validate()
 
+    const path: any = route.query.redirect  // 
     loading.value = true
     try {
-        await UserStore.userLogin(
+        await userStore.userLogin(
             {
                 username: loginForm.username,
                 password: loginForm.password
             }
         )
         loading.value = false
-        router.push('/')
+        router.push({ path: path || '/' })
         ElNotification({
             type: 'success',
             message: '登录成功',
