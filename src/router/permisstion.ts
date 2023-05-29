@@ -51,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach((to, from) => {
     nprogress.done() // 关闭进度条
     document.title = '甄选—' + to.meta.title // 设置标题栏中的文本
+    // document.title = '甄选—' + $t(`menu.${to.meta.title}`) // 设置标题栏中的文本
 })
 
 //用户未登录:可以访问login,其余六个路由不能访问(指向login)

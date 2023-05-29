@@ -3,11 +3,11 @@
         <el-card>
             <el-form :inline="true" class="search_box">
                 <el-form-item label="职位搜索">
-                    <el-input placeholder="请输入您想搜索的职位！"></el-input>
+                    <el-input v-model="searchText" placeholder="请输入您想搜索的职位！"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary">搜索</el-button>
-                    <el-button type="warning">重置</el-button>
+                    <el-button type="primary" @click="searchBtn" :disabled="searchText ? false : true">搜索</el-button>
+                    <el-button type="warning" @click="reset">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -24,11 +24,12 @@
                 <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip align="center" />
                 <el-table-column label="操作" align="center" width="280">
                     <template #default="scope">
-                        <el-button type="success" size="small" icon="User">分配权限</el-button>
+                        <el-button type="success" size="small" icon="User"
+                            @click="setPermisstion(scope.row.id)">分配权限</el-button>
                         <el-button type="primary" size="small" icon="Edit" @click="roleUpdata(scope.row)">编辑</el-button>
 
                         <el-popconfirm :title="`你确定要删除${scope.row.roleName}?`" width="260px"
-                            @confirm="removeRolebtn(scope.row.id)">
+                            @confirm="reqRemoveRolebtn(scope.row.id)">
                             <template #reference>
                                 <el-button type="danger" size="small" icon="Delete">删除</el-button>
                             </template>
@@ -42,6 +43,7 @@
                 @current-change="handleCurrentChange" />
         </el-card>
 
+        <!-- 弹窗 -->
         <el-dialog v-model="dialogFormVisible" title="新增角色">
             <el-form :model="RoleParams" :rules="rules" ref="form">
                 <el-form-item label="角色名称" prop="roleName">
@@ -57,18 +59,40 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 抽屉 -->
+        <el-drawer v-model="drawer">
+            <template #header>
+                <h4>分配角色的菜单权限和按钮权限</h4>
+            </template>
+            <template #default>
+                <div>
+                    <el-tree ref="tree" :data="menuData" show-checkbox node-key="id" default-expand-all
+                        :props="defaultProps" :default-checked-keys="checkedArr" />
+                </div>
+            </template>
+            <template #footer>
+                <div style="flex: auto">
+                    <el-button @click="drawer = false">取消</el-button>
+                    <el-button type="primary" @click="submitPer">确定</el-button>
+                </div>
+            </template>
+        </el-drawer>
     </div>
 </template>
 
 <script setup lang='ts'>
 import { ref, onMounted, reactive, nextTick } from 'vue';
-import { getAllRole, addOrUpdataRole, removeRole } from '@/api/acl/role'
+import { reqGetAllRole, reqAddOrUpdataRole, reqRemoveRole, reqGetAllPerm, reqSetPermisstion } from '@/api/acl/role'
+import { ElMessage } from 'element-plus'
+import uselayoutSettingStore from '@/store/modules/setting';
 
 onMounted(() => {
     getRoleData()
 })
 
-const validatePass = (rule: any, value: any, callBack: any) => {
+const layoutSettingStore = uselayoutSettingStore()
+
+const validatePass = (_rule: any, value: any, callBack: any) => {
     if (value.trim().length >= 2) {
         callBack();
     } else {
@@ -79,7 +103,7 @@ const validatePass = (rule: any, value: any, callBack: any) => {
 let tableData = ref()
 // dialog 数据
 let RoleParams: any = reactive({
-    roleName: ''
+    roleName: '',
 })
 // dialog 表单校验
 const rules = reactive({
@@ -87,6 +111,8 @@ const rules = reactive({
 })
 // 表单实例
 const form = ref()
+// 树型结构实例
+const tree = ref()
 // 当前页
 let currentPage = ref(1)
 // 当前每页多少条
@@ -97,13 +123,21 @@ let total = ref()
 let searchText = ref('')
 // 控制 新增or编辑 form表单 dialog 隐藏显示
 let dialogFormVisible = ref(false)
-
+// 控制抽屉的打开和关闭
+let drawer = ref(false)
+// 树形控件
+const defaultProps = {
+    children: 'children',
+    label: 'name',
+}
+let menuData = ref([])
+let checkedArr = ref([])
 
 // 获取表格最新数据
 const getRoleData = async (pager = 1) => {
     //修改当前页码
     currentPage.value = pager;
-    let res: any = await getAllRole(currentPage.value, pageSize.value, searchText.value)
+    let res: any = await reqGetAllRole(currentPage.value, pageSize.value, searchText.value)
     if (res.code === 200) {
         total.value = res.data.total;
         tableData.value = res.data.records;
@@ -145,7 +179,7 @@ const roleUpdata = (row: any) => {
 const save = async () => {
     // 表单验证通过
     await form.value.validate();
-    let res = await addOrUpdataRole(RoleParams)
+    let res = await reqAddOrUpdataRole(RoleParams)
 
     if (res.code == 200) {
         //对话框显示
@@ -158,15 +192,73 @@ const save = async () => {
 }
 
 // 删除角色
-const removeRolebtn = async (id: number) => {
-    let res: any = await removeRole(id)
+const reqRemoveRolebtn = async (id: number) => {
+    let res: any = await reqRemoveRole(id)
 
     if (res.code == 200) {
         getRoleData(currentPage.value)
     }
 }
 
+// 搜索
+const searchBtn = () => {
+    getRoleData()
+    searchText.value = ''
+}
+// 重置
+const reset = () => {
+    searchText.value = ''
+    getRoleData()
+}
 
+// 分配权限按钮
+const setPermisstion = async (id: number) => {
+    //收集当前要分类权限的职位的数据
+    Object.assign(RoleParams, { id: id })
+
+    drawer.value = true
+    let res: any = await reqGetAllPerm(id)
+    if (res.code == 200) {
+        menuData.value = res.data
+        checkedArr.value = filterPerm(menuData.value, [])
+
+    }
+}
+
+// 过滤权限选中数据
+const filterPerm = (oldArr: any, newArr: any) => {
+    oldArr.forEach((item: { select: any; level: number; children: any; id: number }) => {
+        if (item.select && item.level == 4) {
+            newArr.push(item.id)
+        } else {
+            filterPerm(item.children, newArr)
+        }
+    });
+    return newArr;
+}
+
+// 确定分配权限
+const submitPer = async () => {
+    let id = RoleParams.id
+    //选中节点的ID
+    let arr = tree.value.getCheckedKeys();
+    //半选的ID
+    let arr1 = tree.value.getHalfCheckedKeys();
+    let permissionId = arr.concat(arr1);
+
+    let res: any = await reqSetPermisstion(id, permissionId)
+    if (res.code == 200) {
+        //抽屉关闭
+        drawer.value = false;
+        //提示信息
+        ElMessage({ type: 'success', message: '分配权限成功' });
+        //页面刷新
+        // window.location.reload();
+        layoutSettingStore.refresh = !layoutSettingStore.refresh   // 组件的销毁 再 创建
+
+    }
+
+}
 </script>
 
 <script lang="ts">
