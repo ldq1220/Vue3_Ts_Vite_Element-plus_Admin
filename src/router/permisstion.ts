@@ -28,6 +28,10 @@ router.beforeEach(async (to, from, next) => {
             } else {
                 try {
                     await userStore.userInfo() // 获取用户信息
+                    //万一:刷新的时候是异步路由,有可能获取到用户信息、异步路由还没有加载完毕,出现空白的效果
+
+                    console.log('获取路由信息过了')
+                    // next({ ...to })
                     next()
                 } catch (error) {
                     // 获取用户信息失败  token 过期或者被更改

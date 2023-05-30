@@ -36,14 +36,12 @@ import { useRoute } from 'vue-router'
 import uselayoutSettingStore from '@/store/modules/setting.ts'
 
 
+const route = useRoute()
+// 获取菜单是否折叠信息
+const layoutSettingStore = uselayoutSettingStore()
 // 获取路由表信息  并传送给 菜单组件
 const userStore = useUserStore()
 const menuList = userStore.menuRoutes
-
-const route = useRoute()
-
-// 获取菜单是否折叠信息
-const layoutSettingStore = uselayoutSettingStore()
 
 </script>
 

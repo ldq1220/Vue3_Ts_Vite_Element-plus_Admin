@@ -42,6 +42,7 @@
 import { defineProps } from 'vue';
 
 defineProps(['menuList'])
+
 </script>
 
 <!-- 注意 必须开启这个  要不然 在组件内幕调用自己 递归是不生效的 -->
