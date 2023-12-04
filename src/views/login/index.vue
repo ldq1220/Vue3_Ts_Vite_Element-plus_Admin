@@ -84,6 +84,7 @@ const login = async () => {
         )
         loading.value = false
         router.push({ path: path || '/' })
+        
         ElNotification({
             type: 'success',
             message: '登录成功',

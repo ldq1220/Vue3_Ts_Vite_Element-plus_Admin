@@ -64,7 +64,7 @@ const useUserStore = defineStore('User', () => {
 
             menuRoutes.value.forEach((route: any) => {
                 router.addRoute(route)
-                console.log(route)
+                // console.log(route)
             })
 
             console.log(menuRoutes.value, router.getRoutes())

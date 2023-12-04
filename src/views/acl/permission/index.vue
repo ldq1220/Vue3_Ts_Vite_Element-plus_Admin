@@ -1,45 +1,47 @@
 <template>
-    <el-table :data="tableData" style="width: 100%; margin-bottom: 20px" row-key="id" border>
-        <el-table-column prop="name" label="名称" />
-        <el-table-column prop="code" label="权限值" />
-        <el-table-column prop="updateTime" label="修改时间" />
-        <el-table-column prop="address" label="操作" width="230px">
-            <template #default="scoped">
-                <el-button type="primary" size="small" :disabled="scoped.row.level == 4 ? true : false"
-                    @click="addMenu(scoped.row)">{{
-                        scoped.row.level == 3 ? '添加功能'
-                        : '添加菜单' }}</el-button>
-                <el-button type="success" size="small" :disabled="scoped.row.level == 1 ? true : false"
-                    @click="updateMenu(scoped.row)">编辑</el-button>
-                <el-popconfirm :title="`你确定要删除${scoped.row.name}?`" width="260px" @confirm="deleteMenu(scoped.row.id)">
-                    <template #reference>
-                        <el-button type="danger" size="small"
-                            :disabled="scoped.row.level == 1 ? true : false">删除</el-button>
-                    </template>
-                </el-popconfirm>
-            </template>
-        </el-table-column>
-    </el-table>
+    <div>
+        <el-table :data="tableData" style="width: 100%; margin-bottom: 20px" row-key="id" border>
+            <el-table-column prop="name" label="名称" />
+            <el-table-column prop="code" label="权限值" />
+            <el-table-column prop="updateTime" label="修改时间" />
+            <el-table-column prop="address" label="操作" width="230px">
+                <template #default="scoped">
+                    <el-button type="primary" size="small" :disabled="scoped.row.level == 4 ? true : false"
+                        @click="addMenu(scoped.row)">{{
+                            scoped.row.level == 3 ? '添加功能'
+                            : '添加菜单' }}</el-button>
+                    <el-button type="success" size="small" :disabled="scoped.row.level == 1 ? true : false"
+                        @click="updateMenu(scoped.row)">编辑</el-button>
+                    <el-popconfirm :title="`你确定要删除${scoped.row.name}?`" width="260px" @confirm="deleteMenu(scoped.row.id)">
+                        <template #reference>
+                            <el-button type="danger" size="small"
+                                :disabled="scoped.row.level == 1 ? true : false">删除</el-button>
+                        </template>
+                    </el-popconfirm>
+                </template>
+            </el-table-column>
+        </el-table>
 
-    <!-- 新增 or 编辑 弹窗 -->
-    <el-dialog v-model="dialogFormVisible" title="新增菜单" width="500px">
-        <el-form :model="formData">
-            <el-form-item label="名称">
-                <el-input placeholder="请你输入菜单名称" v-model="formData.name"></el-input>
-            </el-form-item>
-            <el-form-item label="权限">
-                <el-input placeholder="请你输入权限数值" v-model="formData.code"></el-input>
-            </el-form-item>
-        </el-form>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="save">
-                    确定
-                </el-button>
-            </span>
-        </template>
-    </el-dialog>
+        <!-- 新增 or 编辑 弹窗 -->
+        <el-dialog v-model="dialogFormVisible" title="新增菜单" width="500px">
+            <el-form :model="formData">
+                <el-form-item label="名称">
+                    <el-input placeholder="请你输入菜单名称" v-model="formData.name"></el-input>
+                </el-form-item>
+                <el-form-item label="权限">
+                    <el-input placeholder="请你输入权限数值" v-model="formData.code"></el-input>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取消</el-button>
+                    <el-button type="primary" @click="save">
+                        确定
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
+    </div>
 </template>
 
 <script setup lang='ts'>

@@ -34,6 +34,14 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore() 
+const token = userStore.token
+if (token) {
+    await userStore.userInfo() // 获取用户信息
+}
+console.log('我是main.s')
+
 app.use(i18n)
 app.use(ElementPlus)
 
